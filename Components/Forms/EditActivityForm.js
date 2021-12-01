@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, Pressable } from 'react-native';
 import { useCurrentActivity } from '../../context/activityContext';
 
-const EditActivitiyForm = React.memo(props => {
+const EditActivitiyForm = props => {
     const [currentActivity, setCurrentActivity] = useCurrentActivity();
     const [newActivityName, setNewActivityName] = useState(currentActivity.name);
     const [editing, setEditing] = useState(false);;
@@ -14,61 +14,76 @@ const EditActivitiyForm = React.memo(props => {
                 body: JSON.stringify({ ...currentActivity, name: newActivityName }),
                 headers: { 'Content-type': 'application/json' }
             })
-                .then(() => setEditing(false))
+            .then(response => response.json())
+                .then((result) => {
+                    setEditing(false);
+                    Alert.alert('Change saved','',[{text:'Very well'}], {cancelable: true });
+                    setCurrentActivity(result)
+                });
+               
         }else{
+            Alert.alert('Nothing changed','',[{text:'Such is life'}],{cancelable: true });
             setEditing(false);
         }
     }
+
+    const onEditClicked = () =>{
+        editing ? checkIfEdited() : setEditing(true);
+    }
+
     return (
      
             <View style={styles.form}>
                 {editing
                     ? <TextInput 
-                    style={{ ...styles.text, backgroundColor: '#a7fcca', height:30 }} 
+                    style={{ ...styles.text, backgroundColor: 'white' }} 
                     value={newActivityName} 
                     onChangeText={setNewActivityName} 
                     autoFocus={editing}
                     onBlur={checkIfEdited} 
                     ></TextInput>
-                    :   <TouchableHighlight style={{height:30}}  underlayColor="#DDDDDD" onLongPress={()=>setEditing(true)}>
-                    <Text style={{ ...styles.text, backgroundColor: '#6a947c' }}>{newActivityName}</Text>
-                    </TouchableHighlight>}
+                    :   <Pressable style={{height:70}}  underlayColor="#DDDDDD" onLongPress={()=>setEditing(true)}>
+                    <Text style={{ ...styles.text, backgroundColor: '#bbbfbf' }}>{newActivityName}</Text>
+                    </Pressable>}
                 
-                    <View style={styles.button}>
-                        <Button color='#3cb531' title='Start' />
+                <View style={styles.buttonContainer}>
+                <View style={styles.button}>
+                        <Button  title='Edit' onPress={onEditClicked} />
                     </View>
-       
-
-            </View>
-      
+                    <View style={styles.button}>
+                        <Button  title='Start' onPress={()=>props.startActivity(currentActivity)} />
+                    </View>
+           </View>
+           </View>
     );
-});
+};
 
 const styles = StyleSheet.create({
-    form: {
-        flex:1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        marginBottom:'20%',
-        justifyContent: 'center',
-    },
+
+    
     text: {
-        borderColor: 'black',
-        borderWidth: 2,
-        width: 150,
-        height: '100%',
+        backgroundColor:'white',
+        width: 180,
+        height: 70,
+        fontSize: 16,
         textAlign: 'center',
-        textAlignVertical: 'center',
+        textAlignVertical : 'center',
+        borderColor: 'black',
+        borderWidth: 1,
+        borderRadius:26
     },
 
+    buttonContainer:{
+        marginTop: '20%',
+        flexDirection:'row',
+        justifyContent:'space-around'
+    },
     button: {
-        
-        width: 150,
-        marginTop: '10%'
+        width: 70
         
     }
 })
-export default EditActivitiyForm;
+export default React.memo(EditActivitiyForm);
 /*   const [editable, setEditable] = useState(false);
    const [label, setLabel] = useState();
    const visible = props.activity !== null;

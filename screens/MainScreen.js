@@ -4,6 +4,7 @@ import { useCurrentActivity } from '../context/activityContext';
 import ActivityForms from '../Components/Forms/ActivityForms';
 import ActivityList from '../Components/ActivityList';
 
+
 const MainScreen = () => {
   const [currentActivity, setCurrentActivity] = useCurrentActivity();
   const [activityList, setActivityList] = useState([]);
@@ -23,7 +24,7 @@ const MainScreen = () => {
         const list = response.map(activity => {
           return {
             name: activity.name,
-            id: activity._id
+            _id: activity._id
           }
         });
         setActivityList(list);
@@ -38,14 +39,21 @@ const MainScreen = () => {
     }
   }, [currentActivity]);
 
-
+  
+  
   return (
-    formType == 'EDIT' || formType == 'ADD' ?
-      <ActivityForms type={formType} closeForm={() =>{
-        setFormType('');
-        setCurrentActivity(null);
-      }} /> :
-      <View style={styles.main}>
+    <View style={styles.main}>
+      <View style={styles.form}>
+        <ActivityForms 
+        type={formType} 
+        closeForm={() => {
+          setFormType('');
+          setCurrentActivity(null);
+        }}
+
+         />
+      </View> 
+      <View style={styles.list}>
         <ActivityList
           list={activityList}
           listChanged={getList} />
@@ -54,15 +62,21 @@ const MainScreen = () => {
           onPress={() => setFormType('ADD')}
         />
       </View>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   main: {
-    flex:1,
-    height:'50%',
     alignItems: 'center',
-    justifyContent:'center',
+  
+  },
+  form:{
+    
+    flex:1
+  },
+  list: {
+   
     marginBottom: '20%',
     marginTop: '30%',
   }

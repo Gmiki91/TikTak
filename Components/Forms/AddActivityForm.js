@@ -23,20 +23,12 @@ const AddActivityForm = React.memo(props => {
                     value={input}
                     onChangeText={setInput}
                 ></TextInput>
-                <View style={styles.buttonContainer}>
-                    <View style={styles.button}>
-                    <Button
-                            title="Cancel"
-                            onPress={props.closeForm}
-                        />
-                        
-                    </View>
+              
                     <View style={styles.button}>
                     <Button
                             title="Enter"
-                            onPress={() => addActivity(input)}
-                        />
-                    </View>
+                            onPress={() => addActivity(input)}/>
+               
                 </View>
             </View>
          
@@ -46,23 +38,13 @@ const AddActivityForm = React.memo(props => {
 
 const styles = StyleSheet.create({
 
-    form: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex:1,
-    },
-    buttonContainer: {
-        width: '70%',
-        marginTop: 40,
-        flexDirection: 'row',
-        justifyContent: 'space-around'
-    },
+    
     button:{
-       width: 70
+       marginTop:'10%',
     },
     input: {
         backgroundColor:'white',
-        width: '80%',
+        width: 180,
         height: 50,
         fontSize: 16,
         textAlign: 'center',

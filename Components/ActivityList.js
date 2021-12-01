@@ -20,7 +20,7 @@ const ActivityList = props => {
             },
             {
                 text: "Delete", onPress: () => {
-                    fetch(`http://192.168.31.203:3030/${activity.id}`, { method: 'DELETE' })
+                    fetch(`http://192.168.31.203:3030/${activity._id}`, { method: 'DELETE' })
                         .then(props.listChanged());
                 }
             }
@@ -33,7 +33,7 @@ const ActivityList = props => {
             style={styles.container}
             contentContainerStyle={{ paddingBottom: '30%', alignItems: 'center' }}>
             {props.list.map(element => (
-                <TouchableHighlight style={{ width: '100%' }} underlayColor="#DDDDDD" key={element.id} onLongPress={() => deleteActivity(element)} onPress={() => activityClicked(element)}>
+                <TouchableHighlight style={{ width: '100%' }} underlayColor="#DDDDDD" key={element._id} onLongPress={() => deleteActivity(element)} onPress={() => activityClicked(element)}>
                     <Text style={styles.text}>{element.name}</Text>
                 </TouchableHighlight>
             ))}

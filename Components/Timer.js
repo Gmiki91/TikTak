@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text,Button, View } from 'react-native';
+import { useCurrentActivity } from '../context/activityContext';
 
+const Timer = props => {
 
-const Timer = () => {
-    
+  const [currentActivity, setCurrentActivity] = useCurrentActivity();
 
     return (
+      props.show ? 
         <View style={styles.screen}>
-            <ActivityList
-                list={activityList}
-            // activityClicked={setCurrentActivity}
-            />
-            <Button
-                title="Add new Activity"
-            // onPress={() => setAddVisibility(prevState => !prevState)}
-            />
+        <Text>Timer</Text>
         </View>
+        :null
     )
 }
 

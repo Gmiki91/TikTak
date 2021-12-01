@@ -35,7 +35,7 @@ app.delete('/:id', async (req, res) => {
 
 app.put('/', async (req, res) => {
     const result = await ActivityModel.findOneAndUpdate(
-        { _id: req.body.id },
+        { _id: req.body._id },
         { name: req.body.name },
         {new:true});
     res.status(200).json(result);
