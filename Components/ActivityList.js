@@ -27,7 +27,7 @@ const ActivityList = props => {
         ],
             { cancelable: true })
     }
-
+    
     return (
         <ScrollView
             style={styles.container}

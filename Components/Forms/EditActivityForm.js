@@ -8,79 +8,79 @@ const EditActivitiyForm = props => {
     const [editing, setEditing] = useState(false);;
 
     const checkIfEdited = () => {
-        if(currentActivity.name !== newActivityName) {
+        if (currentActivity.name !== newActivityName) {
             fetch('http://192.168.31.203:3030/', {
                 method: 'PUT',
                 body: JSON.stringify({ ...currentActivity, name: newActivityName }),
                 headers: { 'Content-type': 'application/json' }
             })
-            .then(response => response.json())
+                .then(response => response.json())
                 .then((result) => {
                     setEditing(false);
-                    Alert.alert('Change saved','',[{text:'Very well'}], {cancelable: true });
+                    Alert.alert('Change saved', '', [{ text: 'Very well' }], { cancelable: true });
                     setCurrentActivity(result)
                 });
-               
-        }else{
-            Alert.alert('Nothing changed','',[{text:'Such is life'}],{cancelable: true });
+
+        } else {
+            Alert.alert('Nothing changed', '', [{ text: 'Such is life' }], { cancelable: true });
             setEditing(false);
         }
     }
 
-    const onEditClicked = () =>{
+    const onEditClicked = () => {
         editing ? checkIfEdited() : setEditing(true);
     }
 
     return (
-     
-            <View style={styles.form}>
-                {editing
-                    ? <TextInput 
-                    style={{ ...styles.text, backgroundColor: 'white' }} 
-                    value={newActivityName} 
-                    onChangeText={setNewActivityName} 
+
+        <View style={styles.form}>
+            {editing
+                ? <TextInput
+                    style={{ ...styles.text, backgroundColor: 'white' }}
+                    value={newActivityName}
+                    onChangeText={setNewActivityName}
                     autoFocus={editing}
-                    onBlur={checkIfEdited} 
-                    ></TextInput>
-                    :   <Pressable style={{height:70}}  underlayColor="#DDDDDD" onLongPress={()=>setEditing(true)}>
+                    onBlur={checkIfEdited}
+                ></TextInput>
+                : <Pressable style={{ height: 70 }} underlayColor="#DDDDDD" onLongPress={() => setEditing(true)}>
                     <Text style={{ ...styles.text, backgroundColor: '#bbbfbf' }}>{newActivityName}</Text>
-                    </Pressable>}
-                
-                <View style={styles.buttonContainer}>
+                </Pressable>}
+
+            <View style={styles.buttonContainer}>
                 <View style={styles.button}>
-                        <Button  title='Edit' onPress={onEditClicked} />
-                    </View>
-                    <View style={styles.button}>
-                        <Button  title='Start' onPress={()=>props.startActivity(currentActivity)} />
-                    </View>
-           </View>
-           </View>
+                    <Button title='Edit' onPress={onEditClicked} />
+                </View>
+                <View style={styles.button}>
+                    <Button title='Start' onPress={() => props.startActivity(currentActivity)} />
+                </View>
+            </View>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
 
-    
+
     text: {
-        backgroundColor:'white',
+        backgroundColor: 'white',
         width: 180,
         height: 70,
         fontSize: 16,
         textAlign: 'center',
-        textAlignVertical : 'center',
+        textAlignVertical: 'center',
         borderColor: 'black',
         borderWidth: 1,
-        borderRadius:26
+        borderRadius: 26
     },
 
-    buttonContainer:{
+    buttonContainer: {
         marginTop: '20%',
-        flexDirection:'row',
-        justifyContent:'space-around'
+        flexDirection: 'row',
+        justifyContent: 'space-around'
     },
     button: {
         width: 70
-        
+
     }
 })
 export default React.memo(EditActivitiyForm);

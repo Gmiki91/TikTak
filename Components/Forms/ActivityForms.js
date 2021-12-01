@@ -11,14 +11,13 @@ const ActivityForms = props => {
             form = <AddActivityForm closeForm={props.closeForm} />;
             break;
         case 'EDIT':
-            form = <EditActivityForm closeForm={props.closeForm} startActivity={()=>{}} />;
+            form = <EditActivityForm closeForm={props.closeForm} startActivity={props.startActivity} />;
             break;
         default:
             null;
     };
 
     return (props.type ?
-
         <Modal transparent={true} animationType='slide' onRequestClose={props.closeForm}>
             <Pressable style={styles.backdrop} onPress={props.closeForm}>
                 <View style={styles.form}>

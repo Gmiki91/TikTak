@@ -3,12 +3,14 @@ import { StyleSheet, View, Button } from 'react-native';
 import { useCurrentActivity } from '../context/activityContext';
 import ActivityForms from '../Components/Forms/ActivityForms';
 import ActivityList from '../Components/ActivityList';
+import Timer from '../Components/Timer'
 
 
 const MainScreen = () => {
   const [currentActivity, setCurrentActivity] = useCurrentActivity();
   const [activityList, setActivityList] = useState([]);
   const [formType, setFormType] = useState();
+  const [startTimer, setStartTimer] = useState(false);
 
   // Init activity list
   useEffect(() => {
@@ -36,22 +38,29 @@ const MainScreen = () => {
     console.log("[useEffect]: getActivity");
     if (currentActivity) {
       setFormType('EDIT');
+    }else{
+      closeForm();
     }
   }, [currentActivity]);
 
+  const closeForm = () => {
+    setFormType('');
+    setStartTimer(false);
+    setCurrentActivity(null);
+  }
   
-  
+  const startActivity = ()=>{
+    setStartTimer(true);
+  }
+ 
   return (
-    <View style={styles.main}>
+    startTimer? <Timer/>
+    :<View style={styles.main}>
       <View style={styles.form}>
         <ActivityForms 
         type={formType} 
-        closeForm={() => {
-          setFormType('');
-          setCurrentActivity(null);
-        }}
-
-         />
+        closeForm={closeForm}
+        startActivity={startActivity}/>
       </View> 
       <View style={styles.list}>
         <ActivityList
@@ -59,8 +68,7 @@ const MainScreen = () => {
           listChanged={getList} />
         <Button
           title="Add new Activity"
-          onPress={() => setFormType('ADD')}
-        />
+          onPress={() => setFormType('ADD')}/>
       </View>
     </View>
   )
@@ -68,15 +76,14 @@ const MainScreen = () => {
 
 const styles = StyleSheet.create({
   main: {
-    alignItems: 'center',
-  
+   
   },
   form:{
     
     flex:1
   },
   list: {
-   
+    alignItems: 'center',
     marginBottom: '20%',
     marginTop: '30%',
   }
