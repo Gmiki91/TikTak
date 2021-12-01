@@ -20,7 +20,7 @@ const EditActivitiyForm = React.memo(props => {
         }
     }
     return (
-        <Modal animationType='slide' onRequestClose={props.closeForm}>
+     
             <View style={styles.form}>
                 {editing
                     ? <TextInput 
@@ -40,7 +40,7 @@ const EditActivitiyForm = React.memo(props => {
        
 
             </View>
-        </Modal>
+      
     );
 });
 

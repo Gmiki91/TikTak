@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {Modal} from 'react-native';
 import AddActivityForm from './AddActivityForm';
 import EditActivityForm from './EditActivityForm';
 
@@ -8,19 +8,19 @@ const ActivityForms = props => {
     let form;
     switch (props.type) {
         case 'ADD':
-            form = <AddActivityForm closeForm={props.closeForm} />;
+            form = <AddActivityForm closeForm = {props.closeForm}/>;
             break;
         case 'EDIT':
-            form = <EditActivityForm closeForm={props.closeForm}/>;
+            form = <EditActivityForm closeForm = {props.closeForm}/>;
             break;
         default:
             null;
     };
 
     return (
-        <View>
+        <Modal animationType='slide' onRequestClose={props.closeForm}>
             {form}
-        </View>
+        </Modal>
     );
 };
 

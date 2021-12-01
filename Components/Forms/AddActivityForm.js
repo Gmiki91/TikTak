@@ -14,7 +14,7 @@ const AddActivityForm = React.memo(props => {
     }, []);
 
     return (
-        <Modal animationType='slide' onRequestClose={props.closeForm}>
+       
           
             <View style={styles.form}>
                 <TextInput
@@ -40,7 +40,7 @@ const AddActivityForm = React.memo(props => {
                 </View>
             </View>
          
-        </Modal>
+    
     );
 });
 
