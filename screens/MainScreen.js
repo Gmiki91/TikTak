@@ -47,7 +47,8 @@ const MainScreen = () => {
       }} /> :
       <View style={styles.main}>
         <ActivityList
-          list={activityList} />
+          list={activityList}
+          listChanged={getList} />
         <Button
           title="Add new Activity"
           onPress={() => setFormType('ADD')}
