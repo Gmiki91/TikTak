@@ -54,7 +54,7 @@ app.put('/timer/', async (req, res) => {
 
     if (dayOfTheDate !== dayActivityStarted) {
         const activityStart = new Date(dayActivityStartedSecs);
-        const midnight = new Date().setHours(24, 0, 0, 0);
+        const midnight = new Date().setHours(0, 0, 0, 0);
         secondsFromYesterday = (midnight - activityStart) / 1000;
         const yesterday = new Date(dayActivityStartedSecs).toISOString().slice(0, 10);
         await updateTimeStamp(activity, yesterday, secondsFromYesterday)
