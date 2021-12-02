@@ -40,7 +40,7 @@ const ActivityList = props => {
 const styles = StyleSheet.create({
     container: {
         width: '80%',
-        marginBottom: '5%',
+        marginBottom: '10%',
         padding: '5%',
         backgroundColor:'white',
         borderColor: Color.mainBorder,

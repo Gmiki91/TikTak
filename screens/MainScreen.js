@@ -52,6 +52,11 @@ const MainScreen = () => {
   const startActivity = ()=>{
     setStartTimer(true);
   }
+
+  const list = activityList.length===0 ? null
+  : <ActivityList
+  list={activityList}
+  listChanged={getList} />
  
   return (
     startTimer? <Timer back={closeForm}/>
@@ -63,9 +68,7 @@ const MainScreen = () => {
         startActivity={startActivity}/>
       </View> 
       <View style={styles.list}>
-        <ActivityList
-          list={activityList}
-          listChanged={getList} />
+       {list}
         <AppButton
           title="Add new Activity"
           onPress={() => setFormType('ADD')}/>
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
   },
   list: {
     alignItems: 'center',
-    marginBottom: '20%',
+    marginBottom: '30%',
     marginTop: '30%',
   }
 })
