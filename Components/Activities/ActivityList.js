@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet, TouchableHighlight, Text } from 'react-native';
-import { useCurrentActivity } from '../context/activityContext';
-import deleteActivity from '../Utility/deleteActivity';
-import * as Color  from '../Utility/colors';
+import { useCurrentActivity } from '../../context/activityContext';
+import * as ApiCalls from '../../Utility/ApiCalls';
+import * as Color  from '../../Utility/colors';
 
 const ActivityList = props => {
     const [currentActivity, setCurrentActivity] = useCurrentActivity();
@@ -13,7 +13,7 @@ const ActivityList = props => {
     }, []);
 
     const onDeleteClicked = activity => {
-        deleteActivity(activity).then(() => {
+        ApiCalls.deleteActivity(activity).then(() => {
             props.listChanged();
         })
             .catch(rejected => {console.log(`not deleted because ${rejected}`) }) 

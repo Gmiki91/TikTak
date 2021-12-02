@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useCurrentActivity } from '../context/activityContext';
-import ActivityForms from '../Components/Forms/ActivityForms';
-import ActivityList from '../Components/ActivityList';
+import ActivityForms from '../Components/Activities/Forms/ActivityForms';
+import ActivityList from '../Components/Activities/ActivityList';
 import Timer from '../Components/Timer'
 import AppButton from '../Components/UI/AppButton';
+import * as ApiCalls from '../Utility/ApiCalls'
 
 const MainScreen = () => {
   const [currentActivity, setCurrentActivity] = useCurrentActivity();
@@ -20,9 +21,7 @@ const MainScreen = () => {
 
   const getList = useCallback(() => {
     console.log("[useCallback]: getList");
-    fetch('http://192.168.31.203:3030/')
-      .then(response => response.json())
-      .then(response => {
+    ApiCalls.getAllActivities().then(response=>{
         const list = response.map(activity => {
           return {
             name: activity.name,

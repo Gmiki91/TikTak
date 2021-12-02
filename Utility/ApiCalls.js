@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-const deleteActivity = activity => {
+export const deleteActivity = activity => {
     return new Promise((resolve, reject) => {
         Alert.alert(`Are you sure you want to delete ${activity.name}?`, '', [
             {
@@ -10,16 +10,24 @@ const deleteActivity = activity => {
             {
                 text: "Delete", onPress: () => {
                     fetch(`http://192.168.31.203:3030/${activity._id}`, { method: 'DELETE' })
-                        .then(() => resolve('Delete clicked'));
+                        .then(() => resolve('Delete clicked'))
+                        .catch(err => reject(err));
                 }
             }
         ],
             {
                 cancelable: true,
                 onDismiss: () => reject('dismissed')
-
             }
         )
     })
 }
-export default deleteActivity;
+
+export const getAllActivities = () => {
+    return new Promise((resolve, reject) => {
+        fetch('http://192.168.31.203:3030/')
+            .then(response => response.json())
+            .then(response => { resolve(response) })
+            .catch(err => reject(err));
+    })
+}

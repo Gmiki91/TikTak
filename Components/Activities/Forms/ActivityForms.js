@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, View, StyleSheet, Pressable } from 'react-native';
 import AddActivityForm from './AddActivityForm';
 import EditActivityForm from './EditActivityForm';
-import * as Color from '../../Utility/colors'
+import * as Color from '../../../Utility/colors'
 
 const ActivityForms = props => {
     console.log(`[ActivityForms] ${props.type}`);

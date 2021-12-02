@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Alert, StyleSheet, Pressable } from 'react-native';
-import deleteActivity from '../../Utility/deleteActivity';
-import { useCurrentActivity } from '../../context/activityContext';
-import AppButton from '../UI/AppButton';
+import * as ApiCalls from '../../../Utility/ApiCalls';
+import { useCurrentActivity } from '../../../context/activityContext';
+import AppButton from '../../UI/AppButton';
 
 const EditActivitiyForm = props => {
     const [currentActivity, setCurrentActivity] = useCurrentActivity();
@@ -34,7 +34,7 @@ const EditActivitiyForm = props => {
     }
 
     const onDeleteClicked = () => {
-        deleteActivity(currentActivity).then(resolved => {
+        ApiCalls.deleteActivity(currentActivity).then(resolved => {
             console.log(resolved);
             props.closeForm()
         })

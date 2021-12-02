@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
-import AppButton from '../UI/AppButton';
+import AppButton from '../../UI/AppButton';
 
 const AddActivityForm = React.memo(props => {
     const [input, setInput] = useState('');
