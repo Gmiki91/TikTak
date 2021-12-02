@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { View, TextInput, StyleSheet, Button, Modal } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
+import AppButton from '../UI/AppButton';
 
 const AddActivityForm = React.memo(props => {
     const [input, setInput] = useState('');
@@ -14,43 +15,31 @@ const AddActivityForm = React.memo(props => {
     }, []);
 
     return (
-       
-          
-            <View style={styles.form}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter activity"
-                    value={input}
-                    onChangeText={setInput}
-                ></TextInput>
-              
-                    <View style={styles.button}>
-                    <Button
-                            title="Enter"
-                            onPress={() => addActivity(input)}/>
-               
-                </View>
-            </View>
-         
-    
+        <View >
+            <TextInput
+                style={styles.input}
+                placeholder="Enter activity"
+                value={input}
+                onChangeText={setInput}
+            ></TextInput>
+            <AppButton
+                title="Enter"
+                onPress={() => addActivity(input)} />
+        </View>
     );
 });
 
 const styles = StyleSheet.create({
-
-    
-    button:{
-       marginTop:'10%',
-    },
     input: {
-        backgroundColor:'white',
+        backgroundColor: 'white',
         width: 180,
         height: 50,
-        fontSize: 16,
+        fontSize: 24,
         textAlign: 'center',
         borderColor: 'black',
         borderWidth: 1,
-        borderRadius:26
+        borderRadius: 26,
+        marginBottom: '15%',
     }
 })
 

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useCurrentActivity } from '../context/activityContext';
 import ActivityForms from '../Components/Forms/ActivityForms';
 import ActivityList from '../Components/ActivityList';
 import Timer from '../Components/Timer'
-
+import AppButton from '../Components/UI/AppButton';
 
 const MainScreen = () => {
   const [currentActivity, setCurrentActivity] = useCurrentActivity();
@@ -54,7 +54,7 @@ const MainScreen = () => {
   }
  
   return (
-    startTimer? <Timer/>
+    startTimer? <Timer back={closeForm}/>
     :<View style={styles.main}>
       <View style={styles.form}>
         <ActivityForms 
@@ -66,7 +66,7 @@ const MainScreen = () => {
         <ActivityList
           list={activityList}
           listChanged={getList} />
-        <Button
+        <AppButton
           title="Add new Activity"
           onPress={() => setFormType('ADD')}/>
       </View>

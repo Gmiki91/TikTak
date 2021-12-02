@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
-import { ScrollView, StyleSheet, TouchableHighlight, Text, Alert } from 'react-native';
+import { ScrollView, StyleSheet, TouchableHighlight, Text } from 'react-native';
 import { useCurrentActivity } from '../context/activityContext';
+import deleteActivity from '../Utility/deleteActivity';
+import * as Color  from '../Utility/colors';
 
 const ActivityList = props => {
-
     const [currentActivity, setCurrentActivity] = useCurrentActivity();
 
     const activityClicked = useCallback(element => {
@@ -11,21 +12,11 @@ const ActivityList = props => {
         setCurrentActivity(element);
     }, []);
 
-    const deleteActivity = activity => {
-        Alert.alert(`Are you sure you want to delete ${activity.name}?`, '', [
-            {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-            },
-            {
-                text: "Delete", onPress: () => {
-                    fetch(`http://192.168.31.203:3030/${activity._id}`, { method: 'DELETE' })
-                        .then(props.listChanged());
-                }
-            }
-        ],
-            { cancelable: true })
+    const onDeleteClicked = activity => {
+        deleteActivity(activity).then(() => {
+            props.listChanged();
+        })
+            .catch(rejected => {console.log(`not deleted because ${rejected}`) }) 
     }
     
     return (
@@ -33,7 +24,12 @@ const ActivityList = props => {
             style={styles.container}
             contentContainerStyle={{ paddingBottom: '30%', alignItems: 'center' }}>
             {props.list.map(element => (
-                <TouchableHighlight style={{ width: '100%' }} underlayColor="#DDDDDD" key={element._id} onLongPress={() => deleteActivity(element)} onPress={() => activityClicked(element)}>
+                <TouchableHighlight 
+                style={{ width: '100%' }} 
+                underlayColor="#DDDDDD" 
+                key={element._id} 
+                onLongPress={()=>onDeleteClicked(element)} 
+                onPress={() => activityClicked(element)}>
                     <Text style={styles.text}>{element.name}</Text>
                 </TouchableHighlight>
             ))}
@@ -43,19 +39,20 @@ const ActivityList = props => {
 
 const styles = StyleSheet.create({
     container: {
-        width: '60%',
+        width: '80%',
         marginBottom: '5%',
         padding: '5%',
-        backgroundColor: '#6a947c',
-        borderColor: 'black',
-        borderWidth: 3,
-        borderRadius: 9,
+        backgroundColor:'white',
+        borderColor: Color.mainBorder,
+        borderWidth: 5,
+        borderRadius: 30,
     },
     text: {
         textAlign: 'center',
         padding: 5,
         fontWeight: 'bold',
-        fontSize: 16
+        textDecorationLine:'underline',
+        fontSize: 24
     }
 })
 

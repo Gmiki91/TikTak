@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, View, StyleSheet, Pressable } from 'react-native';
 import AddActivityForm from './AddActivityForm';
 import EditActivityForm from './EditActivityForm';
+import * as Color from '../../Utility/colors'
 
 const ActivityForms = props => {
     console.log(`[ActivityForms] ${props.type}`);
@@ -41,11 +42,11 @@ const styles = StyleSheet.create({
     form: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth: 1,
-        borderColor: 'black',
+        borderWidth: 5,
+        borderColor: Color.modalBorder,
         padding: '10%',
-        backgroundColor: '#328f9c',
-        borderRadius: 16
+        backgroundColor: 'rgba(255, 255, 255,0.85)',
+        borderRadius: 60
 
     },
 

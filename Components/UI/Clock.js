@@ -1,28 +1,53 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import CircularProgress from "./CircularProgress";
+
 
 const Clock = (props) => {
-    const hour = Math.floor(props.time / 3600);
-    const displayHour = hour >= 1 ? <Text className="digits">
-        {("0" + Math.floor(props.time / 3600)).slice(-2)}:
-    </Text>
+    const percentage = 66;
+    const seconds = ("0" + Math.floor(props.time % 60)).slice(-2);
+    const secondPercentage = (seconds / 60) * 100;
+    const minutes = ("0" + Math.floor(props.time / 60) % 60).slice(-2);
+    const minutesPercentage = (minutes / 60) * 100;
+    const hours = Math.floor(props.time / 3600);
+    const displayHour = hours >= 1
+        ? <CircularProgress
+            size={100}
+            strokeWidth={10}
+            percentage={100}
+            color="#b82c21"
+            time={hours}
+            unit={"hour"} />
         : null;
     return (
         <View style={styles.timer}>
             {displayHour}
-            <Text >
-                {("0" + Math.floor(props.time / 60) % 60).slice(-2)}:
-            </Text>
+            <CircularProgress
+                size={100}
+                strokeWidth={10}
+                percentage={minutesPercentage}
+                color="#b82c21"
+                time={minutes}
+                unit={"min"}
+            />
+            <CircularProgress
+                size={100}
+                strokeWidth={10}
+                percentage={secondPercentage}
+                color="#b82c21"
+                time={seconds}
+                unit={"sec"}
+            />
 
-            <Text >
-                {("0" + Math.floor(props.time % 60)).slice(-2)}
-            </Text>
+
         </View>
     );
 }
 const styles = StyleSheet.create({
     timer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        width: '90%',
+        justifyContent: 'space-around',
     },
 
 })

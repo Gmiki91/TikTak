@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, Pressable } from 'react-native';
+import { View, Text, TextInput, Alert, StyleSheet, Pressable } from 'react-native';
+import deleteActivity from '../../Utility/deleteActivity';
 import { useCurrentActivity } from '../../context/activityContext';
+import AppButton from '../UI/AppButton';
 
 const EditActivitiyForm = props => {
     const [currentActivity, setCurrentActivity] = useCurrentActivity();
@@ -31,8 +33,15 @@ const EditActivitiyForm = props => {
         editing ? checkIfEdited() : setEditing(true);
     }
 
-    return (
+    const onDeleteClicked = () => {
+        deleteActivity(currentActivity).then(resolved => {
+            console.log(resolved);
+            props.closeForm()
+        })
+            .catch(rejected => {console.log(`not deleted ${rejected}`) }) //not deleted
+    }
 
+    return (
         <View style={styles.form}>
             {editing
                 ? <TextInput
@@ -47,78 +56,36 @@ const EditActivitiyForm = props => {
                 </Pressable>}
 
             <View style={styles.buttonContainer}>
-                <View style={styles.button}>
-                    <Button title='Edit' onPress={onEditClicked} />
-                </View>
-                <View style={styles.button}>
-                    <Button title='Start' onPress={() => props.startActivity(currentActivity)} />
-                </View>
+                <AppButton title='Edit' onPress={onEditClicked} />
+                <AppButton title='Delete' onPress={onDeleteClicked} />
+                <AppButton title='Start' onPress={props.startActivity} />
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-
-
+    form:{
+        width:'75%',
+        alignItems: 'center',
+    },
     text: {
         backgroundColor: 'white',
         width: 180,
         height: 70,
-        fontSize: 16,
+        fontSize: 24,
         textAlign: 'center',
         textAlignVertical: 'center',
         borderColor: 'black',
         borderWidth: 1,
-        borderRadius: 26
+        borderRadius: 26,
+        padding:20
     },
 
     buttonContainer: {
         marginTop: '20%',
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-between'
     },
-    button: {
-        width: 70
-
-    }
 })
 export default React.memo(EditActivitiyForm);
-/*   const [editable, setEditable] = useState(false);
-   const [label, setLabel] = useState();
-   const visible = props.activity !== null;
-   const labelInput = visible ? props.activity.name : 'error';
-   const editLabel = editable ? 'Ok' : 'Edit';
-
-   const deleteActivity = () => {
-       alert(`Are you sure you want to delete`);
-       props.closeForm();
-   }
-
-   const changeLabel = () => {
-       if (editable) {
-           fetch('http://192.168.31.203:3030/', {
-               method: 'PUT',
-               body: JSON.stringify({ ...props.activity, name: label }),
-               headers: { 'Content-type': 'application/json' }
-           })
-               .then(() => {
-                   setEditable(prevstate => !prevstate);
-               });
-       } else {
-           setEditable(prevstate => !prevstate);
-       }
-   }
-
-   return (
-       <Modal visible={visible} animationType='slide'>
-           <View style={styles.form}>
-               {editable ? <TextInput value={} onChangeText={setLabel}></TextInput> : <Text>{label}</Text>}
-               <Button title={editLabel} onPress={changeLabel} />
-               <Button title='Cancel' onPress={props.closeForm} />
-               <Button title='Delete' onPress={deleteActivity} />
-               <Button title='Start' />
-           </View>
-       </Modal>
-   )*/
-

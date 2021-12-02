@@ -15,13 +15,4 @@ const CurrentActivityProvider = props => {
     return <CurrentActivityContext.Provider value={value} {...props} />
 }
 
-/*
-export const ActivityContextProvider = props =>{
-
-    return (
-        <ActivityContext.Provider value={[activity, setActivity]}>
-            {props.children}
-        </ActivityContext.Provider>
-    )
-}*/
 export {CurrentActivityProvider, useCurrentActivity};
