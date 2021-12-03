@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import * as ApiCalls from '../Utility/ApiCalls'
 import { useIsFocused } from '@react-navigation/native'
 import StatControls from '../Components/StatControls';
+
 const Stats = () => {
   const isFocused = useIsFocused();
 
@@ -10,7 +11,6 @@ const Stats = () => {
     ApiCalls.getAllActivities().then(result => {
       const today = new Date().toISOString().slice(0, 10);
       const activityTimePairs = [];
-
       result.forEach(activity => {
         const name = activity.name;
         const time = +activity.timestamps
@@ -20,37 +20,26 @@ const Stats = () => {
           activityTimePairs.push({ name: name, time: time })
         }
       });
-      
       console.log(activityTimePairs);
     });
   }, [isFocused]);
 
+  const thisYear = +new Date().toISOString().slice(0, 4);
+  const thisMonth = +new Date().toISOString().slice(5, 7);
+  const today= +new Date().toISOString().slice(8, 10);
+
   return (
-    <StatControls />
+    <View>
+    <StatControls year={thisYear} month={thisMonth} day={today}/>
+    </View>
   );
 }
 
-export default Stats;
+const styles = StyleSheet.create({
+  controlContainer: {
+    marginTop: '20%',
+    width: '50%'
+  }
+})
 
-/*
-Array [
-  Object {
-    "__v": 0,
-    "_id": "61a937840f6373b6f56a3074",
-    "name": "Alvás",
-    "timestamps": Array [],
-  },
-  Object {
-    "__v": 0,
-    "_id": "61a93b720f6373b6f56a307b",
-    "name": "zum",
-    "timestamps": Array [],
-  },
-  Object {
-    "__v": 0,
-    "_id": "61a93b90e0f3222b826f7dac",
-    "name": "pam kutya",
-    "timestamps": Array [],
-  },
-]
-*/
+export default Stats;

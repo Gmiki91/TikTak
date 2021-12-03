@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { ScrollView, StyleSheet, TouchableHighlight, Text } from 'react-native';
 import { useCurrentActivity } from '../../context/activityContext';
 import * as ApiCalls from '../../Utility/ApiCalls';
-import * as Color  from '../../Utility/colors';
+import * as Color  from '../../Utility/Colors';
 
 const ActivityList = props => {
     const [currentActivity, setCurrentActivity] = useCurrentActivity();
