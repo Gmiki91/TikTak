@@ -1,43 +1,79 @@
-import React, { useEffect } from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import * as ApiCalls from '../Utility/ApiCalls'
-import { useIsFocused } from '@react-navigation/native'
 import StatControls from '../Components/StatControls';
+import { VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 
 const Stats = () => {
-  const isFocused = useIsFocused();
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+
+  /*
+  filter:
+  0 - day selected
+  1 - month selected
+  2 - year selected
+  */
+  const [filter, setFilter] = useState(0);
+
+  /*
+  data pl:
+  Array [
+    Object {
+      "name": "Alvás",
+      "time": 2,
+    },
+    Object {
+      "name": "pam kutya",
+      "time": 16,
+    },
+  ]
+  */
+  const [data, setData] = useState(null)
+
 
   useEffect(() => {
     ApiCalls.getAllActivities().then(result => {
-      const today = new Date().toISOString().slice(0, 10);
       const activityTimePairs = [];
       result.forEach(activity => {
         const name = activity.name;
         const time = +activity.timestamps
-          .filter(timestamp => timestamp.date === today)
-          .map(timestamp => timestamp.time).join(' ');
+          .filter(timestamp => {
+            switch (filter) {
+              case 0: return timestamp.date === date;
+              case 1: return timestamp.date.slice(0, 7) === date.slice(0, 7);
+              case 2: return timestamp.date.slice(0, 4) === date.slice(0, 4);
+              default: throw new Error();
+            }
+          })
+          .reduce((sum, timestamp) => sum + timestamp.time, 0);
         if (time > 0) {
           activityTimePairs.push({ name: name, time: time })
         }
       });
-      console.log(activityTimePairs);
+      setData(activityTimePairs);
     });
-  }, [isFocused]);
+  }, [date, filter]);
 
-  const thisYear = +new Date().toISOString().slice(0, 4);
-  const thisMonth = +new Date().toISOString().slice(5, 7);
-  const today= +new Date().toISOString().slice(8, 10);
+  const chart = data ? <VictoryChart width={350} theme={VictoryTheme.material}>
+    <VictoryBar data={data} x="name" y="time" />
+  </VictoryChart> : null;
 
   return (
+
     <View>
-    <StatControls year={thisYear} month={thisMonth} day={today}/>
+      {chart}
+      <StatControls
+        changeDate={(day, month, year) => setDate(`${year}-${month}-${day}`)}
+        changeFilter={setFilter}
+        period={filter}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   controlContainer: {
-    marginTop: '20%',
+    marginTop: '10%',
     width: '50%'
   }
 })

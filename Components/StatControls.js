@@ -4,13 +4,15 @@ import RadioForm from 'react-native-simple-radio-button';
 import Selector from './UI/Selector';
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const thirtyDayMonths = ['February','April', 'June', 'September', 'November'];
+const thirtyDayMonths = ['February', 'April', 'June', 'September', 'November'];
+const thisYear = +new Date().toISOString().slice(0, 4);
+const thisMonth = +new Date().toISOString().slice(5, 7);
+const today = +new Date().toISOString().slice(8, 10);
 
 const StatControls = props => {
-    const [period, setPeriod] = useState(0);
-    const [day, setDay] = useState(props.day);
-    const [month, setMonth] = useState(months[props.month - 5]);
-    const [year, setYear] = useState(props.year);
+    const [day, setDay] = useState(today);
+    const [month, setMonth] = useState(months[thisMonth - 1]);
+    const [year, setYear] = useState(thisYear);
 
     const data = [
         { label: 'Daily', value: 0 },
@@ -19,8 +21,15 @@ const StatControls = props => {
     ];
 
     useEffect(() => {
+        props.changeDate(
+            ('0'+day).slice(-2),
+            ('0'+(months.indexOf(month)+1)).slice(-2),
+            year);
+    }, [day, month, year]);
+
+    useEffect(() => {
         const maxDay = getMaxDay();
-        if(day>maxDay){
+        if (day > maxDay) {
             setDay(maxDay);
         }
     }, [month, year])
@@ -46,7 +55,7 @@ const StatControls = props => {
         if (changedIndex > 11) {
             setMonth(months[0]);
         } else if (changedIndex < 0) {
-            setMonth[months[11]];
+            setMonth(months[11]);
         } else {
             setMonth(months[changedIndex]);
         }
@@ -63,18 +72,18 @@ const StatControls = props => {
         }
     }
 
-    const getMaxDay = () =>{
+    const getMaxDay = () => {
         if (thirtyDayMonths.indexOf(month) > -1) {
             if (month === 'February') {
                 if (new Date(year, 1, 29).getMonth() == 1) {
-                    return  29;
+                    return 29;
                 } else {
                     return 28;
                 }
             } else {
                 return 30;
             }
-        }else{
+        } else {
             return 31;
         }
     }
@@ -84,12 +93,12 @@ const StatControls = props => {
             <View style={styles.column}>
                 <RadioForm
                     radio_props={data}
-                    initial={period}
-                    onPress={(value) => { setPeriod(value) }} />
+                    initial={props.period}
+                    onPress={(value) => props.changeFilter(value) } />
             </View>
             <View style={styles.column}>
-                <Selector type={'day'} value={day} change={(amount) => change('day', amount)} disabled={period > 0} />
-                <Selector type={'month'} value={month} change={(amount) => change('month', amount)} disabled={period > 1} />
+                <Selector type={'day'} value={day} change={(amount) => change('day', amount)} disabled={props.period > 0} />
+                <Selector type={'month'} value={month} change={(amount) => change('month', amount)} disabled={props.period > 1} />
                 <Selector type={'year'} value={year} change={(amount) => change('year', amount)} />
             </View>
         </View >
