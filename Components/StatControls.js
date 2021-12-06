@@ -108,8 +108,6 @@ const StatControls = props => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginTop: '20%',
-
         justifyContent: 'space-around',
         alignItems: 'center',
     },
