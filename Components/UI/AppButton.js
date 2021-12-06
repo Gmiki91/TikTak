@@ -3,7 +3,7 @@ import { Text, StyleSheet } from 'react-native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const AppButton = props => (
-        <Pressable disabled={props.disabled} style={{...styles.button, backgroundColor:props.disabled?'#787878' : '#fc470a'}} {...props}>
+        <Pressable disabled={props.disabled} style={{...styles.button, backgroundColor:props.disabled?'#787878' : '#fc470a', ...props.style}} {...props}>
             <Text style={{ fontSize: 24, textAlign: 'center', color:props.disabled ? '#383838': 'black' }}>{props.title}</Text>
         </Pressable>
     )

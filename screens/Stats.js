@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
 import * as ApiCalls from '../Utility/ApiCalls'
 import * as Color from '../Utility/Colors'
 import StatControls from '../Components/StatControls';
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryLabel } from 'victory-native';
+import { VictoryPie } from 'victory-native';
+import AppButton from '../Components/UI/AppButton';
 
 const Stats = () => {
   const [loading, setloading] = useState(true)
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [showChart, setShowChart] = useState(false); // false - Numbers, true - Chart
 
   /*
   filter:
@@ -16,20 +18,6 @@ const Stats = () => {
   2 - year selected
   */
   const [filter, setFilter] = useState(0);
-
-  /*
-  data pl:
-  Array [
-    Object {
-      "name": "Alvás",
-      "time": 2,
-    },
-    Object {
-      "name": "pam kutya",
-      "time": 16,
-    },
-  ]
-  */
   const [data, setData] = useState([])
 
 
@@ -57,7 +45,6 @@ const Stats = () => {
           activityTimePairs.push({ name: name, time: time })
         }
       });
-      console.log(activityTimePairs);
       setData(activityTimePairs);
     });
     return () => {
@@ -65,47 +52,53 @@ const Stats = () => {
     }
   }, [date, filter]);
 
+  const noData = <Text style={styles.text}>No data recorded for this timeperiod</Text>;
+  const spinner = <ActivityIndicator style={{ marginTop: '50%' }} size="large" color={Color.modalBorder} />;
   const chart = data.length > 0 ?
-    <VictoryChart
-      width={350}
-      theme={VictoryTheme.material}
-      domainPadding={25}
-    >
-      <VictoryAxis
-      />
-      <VictoryAxis
-        style={{
-          axisLabel: { padding: 36 },
-          tickLabels: { padding: 8 }
-        }}
-        dependentAxis
+    <VictoryPie
+      x="name"
+      y="time"
+      radius={90}
+      labelPlacement="perpendicular"
+      colorScale={"warm"}
+      data={data} />
+    : noData;
 
-      />
-      <VictoryBar
+  const dataNumbers = data.length > 0 ?
+    <ScrollView style={{marginTop:'10%', marginLeft:'5%'}}>
+      {data.map(adat => {
+        let unit = 'minutes';
+        let amount = (adat.time / 60).toFixed(1);
+        if (adat.time > 3600) {
+          unit = 'hours';
+          amount = (adat.time / 3600).toFixed(1);
+        } else if (adat.time > 86400) {
+          unit = 'days';
+          amount = (adat.time / 86400).toFixed(1);
+        }
+        return <Text key={adat.name}>{adat.name}: {amount} {unit} </Text>
+      })}
+    </ScrollView>
+    : noData
 
-        data={data}
-        x="name"
-        y="time"
-        barRatio={0.7}
-        style={{
-          data: {
-            fill: ({ index }) => index % 2 === 1 ? Color.mainBorder : Color.modalBorder
-          }
-        }}
-      />
-    </VictoryChart> : <Text style={{ marginTop: '50%', textAlign: 'center' }}>No data recorder for this timeperiod</Text>;
-    
-  const displayChart = loading ?  <ActivityIndicator style={{ marginTop: '50%'}}  size="large" color={Color.modalBorder} /> : chart;
+  const displayChart = loading ? spinner : chart;
+  const displayNumbers = loading ? spinner : dataNumbers;
+  const display = showChart ? displayChart : displayNumbers;
+
   return (
-
     <View style={styles.container}>
-      {displayChart}
+      <View style={styles.buttonContainer}>
+        <AppButton title={showChart ? 'Chart' : 'Plain data'} onPress={()=>setShowChart(prevstate=>!prevstate)} />
+      </View>
+      <View style={styles.displayContainer}>
+      {display}
+      </View>
       <View style={styles.controls}>
-      <StatControls
-        changeDate={(day, month, year) => setDate(`${year}-${month}-${day}`)}
-        changeFilter={setFilter}
-        period={filter}
-      />
+        <StatControls
+          changeDate={(day, month, year) => setDate(`${year}-${month}-${day}`)}
+          changeFilter={setFilter}
+          period={filter}
+        />
       </View>
     </View>
 
@@ -114,11 +107,24 @@ const Stats = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: '8%',
     flex: 1,
+    
+  },
+  buttonContainer:{
+    alignItems: 'center',
+ 
+  },
+  displayContainer:{
+    flex:2
   },
   controls: {
     flex: 1,
     justifyContent: 'flex-end'
+  },
+  text: {
+    marginTop: '50%',
+    textAlign: 'center'
   }
 })
 

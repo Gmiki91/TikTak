@@ -8,7 +8,6 @@ const ActivityList = props => {
     const [currentActivity, setCurrentActivity] = useCurrentActivity();
 
     const activityClicked = useCallback(element => {
-        console.log(element);
         setCurrentActivity(element);
     }, []);
 

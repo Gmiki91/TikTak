@@ -35,7 +35,6 @@ const EditActivitiyForm = props => {
 
     const onDeleteClicked = () => {
         ApiCalls.deleteActivity(currentActivity).then(resolved => {
-            console.log(resolved);
             props.closeForm()
         })
             .catch(rejected => {console.log(`not deleted ${rejected}`) }) //not deleted
