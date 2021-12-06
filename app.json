@@ -4,9 +4,9 @@
     "slug": "TikTak",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/tikktakkicon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/tikktakkicon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
